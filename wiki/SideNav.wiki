@@ -1,4 +1,3 @@
-#sidebar SideNav
   * [Intro]
   * [WhatsNew Whats New?]
   * [FAQ]
