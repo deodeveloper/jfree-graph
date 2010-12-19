@@ -2,7 +2,7 @@
   * [WhatsNew Whats New?]
   * [FAQ]
   * Collaborate :)
-    * [HowToJoinFundTheProject Spent some coins and aid the cause! ]
+    * [HowToFundTheProject Spent some coins and aid the cause! ]
     * [HowToJoinTheProject Join the project!]
   * [Documentation]
     * [GettingStarted Getting Started]
