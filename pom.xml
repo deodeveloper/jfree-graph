@@ -6,7 +6,7 @@
 
 	<groupId>org.ninux.graph</groupId>
 	<artifactId>core</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.0</version>
   
 	<build>
 		<directory>${project.basedir}/target</directory>
