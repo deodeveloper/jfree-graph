@@ -1,7 +1,7 @@
   * [Intro]
   * [WhatsNew Whats New?]
   * [FAQ]
-  * [Collaborate Collaborate :)]
+  * Collaborate :)
     * [HowToJoinFundTheProject Spent some coins and aid the cause! ]
     * [HowToJoinTheProject Join the project!]
   * [Documentation]
