@@ -1,0 +1,3 @@
+= Getting Started=
+
+TODO: Add a basic guide with examples to show how the library works 
