@@ -17,4 +17,4 @@ In this section I will try to layout the features I intend to implement. The sam
 
 == Got more ideas? ==
 
-Just write a comment here or post in the google groups page
+Just write a comment here or post in the google groups page.
