@@ -13,3 +13,8 @@ In this section I will try to layout the features I intend to implement. The sam
   * *Thoughtful base of examples:* This I think is really important. And I don't mean the simple test cases libraries usually deliver, no sir, I mean some good examples on how graphs can be useful for everybody.
   * *Graph persistence:* Well this is big... but as I rule out other development stuff I would really like to dive into this.
   * *Research and innovation:* And you thought I couldn't say any crazier things...
+
+
+== Got more ideas? ==
+
+Just write a comment here or post in the google groups page
