@@ -1,3 +1,26 @@
 = Getting Started=
 
-TODO: Add a basic guide with examples to show how the library works 
+The first think we need to do is to create our graph. At the moment of this writing there are 2 underlying implementations of the Graph interface: the _TestAdjacencyMatrixGraph_ (good for dense graphs) and the _AdjacencyMapGraph_ (good for sparse graphs).
+
+For this example, we choose the _AdjacencyMapGraph_ :
+
+{{{
+Graph friendGraph = new AdjacencyMapGraph();
+}}}
+
+Next we will want to add some nodes as in the following image:
+
+TODO: Add image of graph layout.
+
+Adding nodes is as simple as:
+
+{{{
+Node burns = friendGraph.addNode(new Friend("Burns"));
+Node peter = friendGraph.addNode(new Friend("Peter"));
+Node homer = friendGraph.addNode(new Friend("Homer"));
+Node stan  = friendGraph.addNode(new Friend("Stan"));
+}}}
+
+You might noticed that when adding a node I ma assigning a content to it, in this case a _Friend_ object. This content is required to implement the interface _Measurable_. We will talk more about it later.
+
+Work in progress: Add a basic guide with examples to show how the library works 
