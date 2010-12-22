@@ -6,6 +6,8 @@ import org.nixus.core.structure.nodes.Node;
 
 public class ArcImpl implements Arc {
 
+	private static final long serialVersionUID = 7984234560219375034L;
+
 	private Measurable<? extends Object, ? extends Object> arcContent;
 	
 	private Node sourceNode;

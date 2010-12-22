@@ -20,6 +20,8 @@ import org.nixus.core.structure.nodes.Node;
  * */
 public class AdjacencyMapNode extends AbstractNode {
 
+	private static final long serialVersionUID = 6988184205744230216L;
+	
 	private Map<Node, Arc> arcsOut;
 	private List<Arc> arcsIn;
 	

@@ -19,6 +19,8 @@ import org.nixus.core.structure.nodes.Node;
  * */
 public class AdjacencyMatrixNode extends AbstractNode {
 
+	private static final long serialVersionUID = 7544569380667117739L;
+	
 	protected int index;
 	
 	/**

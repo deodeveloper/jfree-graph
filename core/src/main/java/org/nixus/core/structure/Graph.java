@@ -1,5 +1,6 @@
 package org.nixus.core.structure;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.nixus.core.structure.auxiliary.Measurable;
@@ -10,7 +11,7 @@ import org.nixus.core.structure.nodes.Node;
  * Public graph interface
  * @author gwachnitz
  */
-public interface Graph {
+public interface Graph extends Serializable {
 	
 
 	/**
