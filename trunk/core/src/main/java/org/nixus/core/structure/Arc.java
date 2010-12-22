@@ -1,5 +1,7 @@
 package org.nixus.core.structure;
 
+import java.io.Serializable;
+
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.nodes.Node;
 
@@ -7,7 +9,7 @@ import org.nixus.core.structure.nodes.Node;
 /**
  * Represents an arc/edge of a Graph
  * */
-public interface Arc {
+public interface Arc  extends Serializable{
 
 	/**
 	 * Gets the start node of this arc

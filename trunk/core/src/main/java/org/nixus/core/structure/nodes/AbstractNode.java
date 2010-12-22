@@ -16,6 +16,8 @@ import org.nixus.core.structure.exceptions.NodeNotInThisGraphException;
  * */
 public abstract class AbstractNode implements Node{
 	
+	private static final long serialVersionUID = 4367531029777710724L;
+
 	/**
 	 * Contend of this graph
 	 * */

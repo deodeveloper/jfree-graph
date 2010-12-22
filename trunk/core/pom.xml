@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.ninux.graph</groupId>
-	<artifactId>core</artifactId>
+	<artifactId>jfree-graph-core</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
   
 	<build>

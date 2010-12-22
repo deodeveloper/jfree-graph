@@ -1,5 +1,6 @@
 package org.nixus.core.structure.nodes;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 
-public interface Node {
+public interface Node extends Serializable{
 
 	/**
 	 * @return the node content.

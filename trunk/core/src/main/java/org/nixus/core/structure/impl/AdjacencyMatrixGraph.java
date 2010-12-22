@@ -10,6 +10,8 @@ import org.nixus.core.structure.nodes.impl.AdjacencyMatrixNode;
 
 public class AdjacencyMatrixGraph extends AbstractGraph {
 
+	private static final long serialVersionUID = -7669246707726460518L;
+
 	/**
 	 * Graph nodes
 	 */

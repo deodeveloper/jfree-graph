@@ -9,6 +9,9 @@ import org.nixus.core.structure.nodes.impl.AdjacencyMapNode;
 
 public class AdjacencyMapGraph extends AbstractGraph {
 	
+	private static final long serialVersionUID = -4310812027462596404L;
+
+
 	public AdjacencyMapGraph() {
 		this.nodes = new LinkedList<Node>();
 		this.nodeCount = 0;

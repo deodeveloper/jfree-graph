@@ -13,6 +13,8 @@ import org.nixus.core.structure.nodes.Node;
 
 public abstract class AbstractGraph implements Graph {
 
+	private static final long serialVersionUID = 7724173851692313275L;
+
 	private static final String NODE_DEFAULT_TAG_START = "Node ";
 
 	protected int nodeCount;
