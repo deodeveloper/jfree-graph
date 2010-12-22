@@ -140,8 +140,6 @@ public abstract class AbstractGraph implements Graph {
 			((AbstractNode)cNode).setVisited(true);
 			returnList.add(cNode);
 			List<Node> neighbors = cNode.getReachableNeighbors();
-			System.out.println(cNode);
-			System.out.println(neighbors);
 			for (Node node : neighbors) {
 				if(!((AbstractNode)node).wasVisited()){
 					nodeStack.push(node);	
