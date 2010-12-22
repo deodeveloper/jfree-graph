@@ -15,7 +15,7 @@ TODO: Add image of graph layout.
 Adding nodes is as simple as:
 
 {{{
-Node me  = friendGraph.addNode(new Friend("Myself"));
+Node me    = friendGraph.addNode(new Friend("Myself"));
 Node bender= friendGraph.addNode(new Friend("Bender"));
 Node peter = friendGraph.addNode(new Friend("Peter"));
 Node homer = friendGraph.addNode(new Friend("Homer"));
