@@ -1,6 +1,7 @@
 package org.nixus.core.structure;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import org.nixus.core.structure.auxiliary.Measurable;
@@ -11,7 +12,7 @@ import org.nixus.core.structure.nodes.Node;
  * Public graph interface
  * @author gwachnitz
  */
-public interface Graph extends Serializable {
+public interface Graph extends Serializable, Collection<Node>{
 	
 
 	/**
@@ -20,7 +21,7 @@ public interface Graph extends Serializable {
 	 * @param content the content of the node.
 	 * @return the recently created node.
 	 */
-	public Node addNode(Measurable<? extends Object, ? extends Object> content);
+	public Node addNode(Measurable<? extends Object> content);
 	
 	/**
 	 * Adds a node to the graph with the specified content.
@@ -28,17 +29,19 @@ public interface Graph extends Serializable {
 	 * @param tag a tag for this node(used for toString purposes)
 	 * @return the recently created node.
 	 */
-	public Node addNode(Measurable<? extends Object, ? extends Object> content, String tag);
+	public Node addNode(Measurable<? extends Object> content, String tag);
 	
 	/**
 	 * @return true if the graph has no nodes in it, false otherwise
 	 * */
+	@Override
 	public boolean isEmpty();
 
 	/**
 	 * @return the number of nodes this graph has
 	 */
-	public long size();
+	@Override
+	public int size();
 	
 	/**
 	 * Returns the nodes of this graph. The list is expected to be used as a read only. least 
@@ -85,5 +88,5 @@ public interface Graph extends Serializable {
 	 * @return the List of nodes in the traverse order.
 	 * */
 	public List<Node> breathFirstTraversal(Node start);
-
+	
 }

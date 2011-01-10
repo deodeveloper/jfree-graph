@@ -1,6 +1,8 @@
 package org.nixus.core.structure;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -9,6 +11,7 @@ import java.util.Stack;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
 import org.nixus.core.structure.nodes.AbstractNode;
+import org.nixus.core.structure.nodes.HiddenNodeAbstraction;
 import org.nixus.core.structure.nodes.Node;
 
 public abstract class AbstractGraph implements Graph {
@@ -40,7 +43,7 @@ public abstract class AbstractGraph implements Graph {
 	}
 
 	@Override
-	public long size() {
+	public int size() {
 		return this.nodeCount;
 	}
 	
@@ -55,9 +58,10 @@ public abstract class AbstractGraph implements Graph {
 	}
 	
 	@Override
-	public Node addNode(Measurable<? extends Object, ? extends Object> content) {
+	public Node addNode(Measurable<? extends Object> content) {
 		String tag = NODE_DEFAULT_TAG_START + nodeCount;
-		return addNode(content, tag );
+		Node node = addNode(content, tag );
+		return node;
 	}
 	
 	@Override
@@ -154,7 +158,87 @@ public abstract class AbstractGraph implements Graph {
 	
 	protected void commonNodeAdd(Node node, String tag) {
 		this.nodes.add(node);
+		((HiddenNodeAbstraction)node).setInsertionOrder(nodeCount);
 		this.nodeCount++;
 		node.setTag(tag);
 	}
+	
+	@Override
+	public boolean contains(Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public Iterator<Node> iterator() {
+		return this.nodes.iterator();
+	}
+
+
+	@Override
+	public Object[] toArray() {
+		return this.nodes.toArray();
+	}
+
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		return this.nodes.toArray(a);
+	}
+
+
+	@Override
+	public boolean add(Node e) {
+		this.addNode(e.getContent());
+		return true;
+	}
+
+
+	@Override
+	public boolean remove(Object o) {
+		//TODO: implement
+		throw new RuntimeException("Not yet implemented");
+	}
+
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return this.nodes.containsAll(c);
+	}
+
+
+	@Override
+	public boolean addAll(Collection<? extends Node> c) {
+		for (Node node : c) {
+			this.add(node);
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		for (Object node : c) {
+			this.remove(node);
+		}
+		return true;
+	}
+
+
+	@Override
+	/**
+	 * Not Implemented
+	 * */
+	public boolean retainAll(Collection<?> c) {
+		throw new RuntimeException("Not implemented operation");
+	}
+
+
+	@Override
+	public void clear() {
+		//TODO: implement
+		throw new RuntimeException("Not yet implemented");
+	}
+	
 }

@@ -8,7 +8,7 @@ public class ArcImpl implements Arc {
 
 	private static final long serialVersionUID = 7984234560219375034L;
 
-	private Measurable<? extends Object, ? extends Object> arcContent;
+	private Measurable<? extends Object> arcContent;
 	
 	private Node sourceNode;
 	
@@ -17,7 +17,7 @@ public class ArcImpl implements Arc {
 	private String tag; 
 	
 	public ArcImpl(Node sourceNode, Node targetNode,
-			Measurable<? extends Object, ? extends Object> edgeContent) {
+			Measurable<? extends Object> edgeContent) {
 		this.arcContent = edgeContent;
 		this.sourceNode = sourceNode;
 		this.targetNode = targetNode;
@@ -25,7 +25,7 @@ public class ArcImpl implements Arc {
 	}
 
 	@Override
-	public Measurable<? extends Object, ? extends Object> getArcContent() {
+	public Measurable<? extends Object> getArcContent() {
 		return arcContent;
 	}
 

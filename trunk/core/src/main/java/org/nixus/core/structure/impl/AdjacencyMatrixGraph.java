@@ -45,13 +45,12 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
 	
 
 	@Override
-	public Node addNode(Measurable<? extends Object, ? extends Object> content, String tag) {
+	public Node addNode(Measurable<? extends Object> content, String tag) {
 		Node node = new AdjacencyMatrixNode(this, content, nodeCount);
 		if(nodeCount >= currentMatrixSize){
 			expandAdjacencyMatrix();
 		}
 		super.commonNodeAdd(node, tag);
-		
 		return node;
 	}
 

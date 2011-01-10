@@ -19,7 +19,7 @@ public interface Arc  extends Serializable{
 	/**
 	 * Gets the content of this arc
 	 * */
-	Measurable<? extends Object, ? extends Object> getArcContent();
+	Measurable<? extends Object> getArcContent();
 
 	/**
 	 * Gets the end node of this arc

@@ -4,16 +4,17 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import org.nixus.core.strategies.ShortestPathStrategy;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 
-public interface Node extends Serializable{
+public interface Node extends Serializable, Comparable<Node>{
 
 	/**
 	 * @return the node content.
 	 * */
-	Measurable<? extends Object, ? extends Object> getContent();
+	Measurable<? extends Object> getContent();
 
 	/**
 	 * @return the graph that owns this node
@@ -38,14 +39,14 @@ public interface Node extends Serializable{
 	 * @param toNode Ending node.
 	 * @param arcContent content of the edge between the two nodes.
 	 */
-	Arc addArcTo(Node targetNode, Measurable<? extends Object, ? extends Object> arcContent);
+	Arc addArcTo(Node targetNode, Measurable<? extends Object> arcContent);
 
 	/**
 	 * Connects 2 nodes of a graph with and edge between them. This connection is in both directions. 
 	 * @param anotherNode Ending node.
 	 * @param arcContent content of the edge between the two nodes.
 	 */
-	Arc addArc(Node aNode, Measurable<? extends Object, ? extends Object> arcContent);
+	Arc addArc(Node aNode, Measurable<? extends Object> arcContent);
 	
 	
 	/**
@@ -77,4 +78,10 @@ public interface Node extends Serializable{
 	 * This return the tag of this node. 
 	 * */
 	String getTag();
+	
+	/**
+	 * Finds the shortest path from this node to the destination Node. Run time of O(E + V log(V)) where V 
+	 * are the number of nodes/vertex and E is the number of arcs/edges
+	 * */
+	NodePath findShortestPathTo(Node destination, ShortestPathStrategy strategy);
 }
