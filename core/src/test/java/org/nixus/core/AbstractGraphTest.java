@@ -5,11 +5,13 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.nixus.core.strategies.ShortestPathStrategy;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
 import org.nixus.core.structure.nodes.Node;
+import org.nixus.core.structure.nodes.NodePath;
 
 public abstract class AbstractGraphTest extends TestCase {
 	protected abstract Graph buildGraph();
@@ -312,23 +314,67 @@ public abstract class AbstractGraphTest extends TestCase {
 		//Clear for other tests
 		TraversalCountContent.totalTraversalCount = 0;
 	}
+	
+	public void testBinaryDijkstra(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		
+		node0.addArc(node1, new MockContent(20));
+		node0.addArc(node2, new MockContent(10));
+		node3.addArc(node6, new MockContent(7));
+		node1.addArc(node3, new MockContent(3));
+		node3.addArc(node2, new MockContent(15));
+		node2.addArc(node4, new MockContent(17));
+		node1.addArc(node5, new MockContent(9));
+		node5.addArc(node6, new MockContent(12));
+		
+		
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		
+		assertNotNull(shortestPath);
+		assertEquals(30, shortestPath.getPathTotalDistance());
+		List<Node> path = shortestPath.getPath();
+		assertEquals(4,path.size());
+		assertEquals(node0, path.get(0));
+		assertEquals(node1, path.get(1));
+		assertEquals(node3, path.get(2));
+		assertEquals(node6, path.get(3));
+		
+	}
 
-	private class MockContent implements Measurable<MockContent, Integer>{
+	private class MockContent implements Measurable<MockContent>{
+		
+		int distance;
+		
+		public MockContent(int i) {
+			this.distance = i;
+		}
+
+		public MockContent() {
+			this(0);
+		}
+		
 		@Override
-		public Integer measure() {
-			// TODO Auto-generated method stub
-			return null;
+		public int measure() {
+			return distance;
 		}
 	}
 	
-	private static class TraversalCountContent implements Measurable<TraversalCountContent, Integer>{
+	private static class TraversalCountContent implements Measurable<TraversalCountContent>{
 		private int traversalCount = 0;
 		private static int totalTraversalCount = 0;
 
 		@Override
-		public Integer measure() {
+		public int measure() {
 			// TODO Auto-generated method stub
-			return null;
+			return 0;
 		}
 	}
 }
