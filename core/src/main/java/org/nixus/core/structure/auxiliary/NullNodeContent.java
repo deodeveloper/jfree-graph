@@ -1,10 +1,10 @@
 package org.nixus.core.structure.auxiliary;
 
-public class NullNodeContent implements Measurable<Object, Object> {
+public class NullNodeContent implements Measurable<Object> {
 
 	@Override
-	public Object measure() {
-		return null;
+	public int measure() {
+		return 0;
 	}
 
 }
