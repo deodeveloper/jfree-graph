@@ -348,6 +348,35 @@ public abstract class AbstractGraphTest extends TestCase {
 		assertEquals(node6, path.get(3));
 		
 	}
+	
+	public void testBinaryDijkstraUnreachableDestination(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		
+		node0.addArc(node1, new MockContent(20));
+		node0.addArc(node2, new MockContent(10));
+		node1.addArc(node3, new MockContent(3));
+		node3.addArc(node2, new MockContent(15));
+		node2.addArc(node4, new MockContent(17));
+		node1.addArc(node5, new MockContent(9));
+		
+		
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		
+		assertNotNull(shortestPath);
+		assertEquals(Integer.MAX_VALUE, shortestPath.getPathTotalDistance());
+		List<Node> path = shortestPath.getPath();
+		assertNotNull(path);
+		assertEquals(0,path.size());
+		
+	}
 
 	private class MockContent implements Measurable<MockContent>{
 		
