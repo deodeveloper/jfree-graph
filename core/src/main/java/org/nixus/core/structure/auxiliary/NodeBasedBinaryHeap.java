@@ -245,7 +245,8 @@ public class NodeBasedBinaryHeap  implements java.io.Serializable {
      *         this queue
      * @throws NullPointerException if the specified array is null
      */
-    public <T> T[] toArray(T[] a) {
+    @SuppressWarnings("unchecked")
+	public <T> T[] toArray(T[] a) {
         if (a.length < size)
             // Make a new array of a's runtime type, but my contents:
             return (T[]) Arrays.copyOf(queue, size, a.getClass());
@@ -479,7 +480,6 @@ public class NodeBasedBinaryHeap  implements java.io.Serializable {
             siftDownComparable(k, x);
     }
 
-    @SuppressWarnings("unchecked")
 	private void siftDownComparable(int k, AbstractNode x) {
         Comparable<? super AbstractNode> key = (Comparable<? super AbstractNode>)x;
         int half = size >>> 1;        // loop while a non-leaf
