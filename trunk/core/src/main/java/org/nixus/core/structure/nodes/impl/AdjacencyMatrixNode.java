@@ -27,13 +27,13 @@ public class AdjacencyMatrixNode extends AbstractNode {
 	 * {@inheritDoc}
 	 * @param index index of this node within the adjacency matrix
 	 */
-	public AdjacencyMatrixNode(Graph owner, Measurable<? extends Object, ? extends Object> content, int index) {
+	public AdjacencyMatrixNode(Graph owner, Measurable<? extends Object> content, int index) {
 		super(owner, content);
 		this.index = index;
 	}
 
 	@Override
-	public Arc addArcTo(Node targetNode, Measurable<? extends Object, ? extends Object> arcContent) {
+	public Arc addArcTo(Node targetNode, Measurable<? extends Object> arcContent) {
 		this.validateNodeIsInTheSameGraph(targetNode);
 		Arc arc = new ArcImpl(this, targetNode, arcContent);
 		((AdjacencyMatrixGraph)owner).getAdjacencyMatrix()[this.index][((AdjacencyMatrixNode)targetNode).index] = arc;
@@ -42,7 +42,7 @@ public class AdjacencyMatrixNode extends AbstractNode {
 	}
 	
 	@Override
-	public Arc addArc(Node aNode, Measurable<? extends Object, ? extends Object> arcContent) {
+	public Arc addArc(Node aNode, Measurable<? extends Object> arcContent) {
 		this.validateNodeIsInTheSameGraph(aNode);
 		Arc arc = new ArcImpl(this, aNode, arcContent);
 		((AdjacencyMatrixGraph)owner).getAdjacencyMatrix()[this.index][((AdjacencyMatrixNode)aNode).index] = arc;
