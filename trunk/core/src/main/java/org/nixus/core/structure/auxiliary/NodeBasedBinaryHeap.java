@@ -12,6 +12,10 @@ import java.util.SortedSet;
 
 import org.nixus.core.structure.nodes.AbstractNode;
 
+/**
+ * Specific binary priority queue based on the java implementation improved to have a O(log(N)) 
+ * complexity on remove(Node) operations. 
+ * */
 public class NodeBasedBinaryHeap  implements java.io.Serializable {
 
 	private static final long serialVersionUID = 6688137418086198209L;
