@@ -80,8 +80,8 @@ public interface Node extends Serializable, Comparable<Node>{
 	String getTag();
 	
 	/**
-	 * Finds the shortest path from this node to the destination Node. Run time of O(E + V log(V)) where V 
-	 * are the number of nodes/vertex and E is the number of arcs/edges
+	 * Finds the shortest path from this node to the destination Node. If target node could not be reached, 
+	 * the distance in the node path will be Integer.MAX_VALUE
 	 * */
 	NodePath findShortestPathTo(Node destination, ShortestPathStrategy strategy);
 }
