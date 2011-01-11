@@ -28,14 +28,14 @@ public class AdjacencyMapNode extends AbstractNode {
 	/**
 	 * {@inheritDoc}
 	 */
-	public AdjacencyMapNode(Graph owner, Measurable<? extends Object, ? extends Object> content) {
+	public AdjacencyMapNode(Graph owner, Measurable<? extends Object> content) {
 		super(owner, content);
 		this.arcsOut = new LinkedHashMap<Node, Arc>();
 		this.arcsIn = new LinkedList<Arc>();
 	}
 
 	@Override
-	public Arc addArcTo(Node targetNode, Measurable<? extends Object, ? extends Object> arcContent) {
+	public Arc addArcTo(Node targetNode, Measurable<? extends Object> arcContent) {
 		this.validateNodeIsInTheSameGraph(targetNode);
 		Arc arc = new ArcImpl(this, targetNode, arcContent);
 		this.arcsOut.put(targetNode, arc);
@@ -45,7 +45,7 @@ public class AdjacencyMapNode extends AbstractNode {
 	}
 	
 	@Override
-	public Arc addArc(Node aNode, Measurable<? extends Object, ? extends Object> arcContent) {
+	public Arc addArc(Node aNode, Measurable<? extends Object> arcContent) {
 		this.validateNodeIsInTheSameGraph(aNode);
 		Arc arc = new ArcImpl(this, aNode, arcContent);
 		this.arcsOut.put(aNode, arc);
