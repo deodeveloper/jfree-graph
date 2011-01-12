@@ -19,4 +19,12 @@ public class NodePath {
 	public long getPathTotalDistance() {
 		return pathTotalDistance;
 	}
+	
+	/**
+	 * Convenience method to know whether a path was 
+	 * found or not to destination 
+	 * */
+	public boolean pathFound(){
+		return pathTotalDistance != Integer.MAX_VALUE;
+	}
 }

@@ -13,6 +13,7 @@ import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeBasedBinaryHeap;
 import org.nixus.core.structure.auxiliary.NullNodeContent;
+import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
 import org.nixus.core.structure.exceptions.NodeNotInThisGraphException;
 
 
@@ -136,14 +137,11 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	public NodePath findShortestPathTo(Node destination,
 			ShortestPathStrategy strategy) {
 		int numNodes = this.owner.size();
-		
 		List<Node> nodes = owner.getNodes();
-		long totalDistance = 0;
 		
 		if(numNodes > 0){
 			switch (strategy) {
 				case BINARY_DIJKSTRA:
-					totalDistance = Long.MIN_VALUE;
 					initializeGraphForShortestPath(nodes);
 					
 					NodeBasedBinaryHeap pq = new NodeBasedBinaryHeap((Collection<? extends AbstractNode>) nodes, new Comparator<AbstractNode>() {
@@ -159,18 +157,43 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 						for (Arc arc : currentNode.getArcsOut()) {
 							AbstractNode neigboringNode = (AbstractNode) arc.getTargetNode();
 							int distance = arc.getArcContent().measure();
-							relax(currentNode, neigboringNode, distance, pq);
+							boolean relaxationOccurred = relax(currentNode, neigboringNode, distance);
+							//update priority queue
+							if(relaxationOccurred){
+								pq.remove(neigboringNode);
+								pq.add(neigboringNode);
+							}
 						}
 					}
-					totalDistance = currentNode.distance;
 					break;
+				case BELLMAN_FORD:
+					initializeGraphForShortestPath(nodes);
+					
+					//Relax all edges #nodes - 1 times
+					for(int i = 1; i < nodes.size(); i++){
+						for (Arc arc : owner.getArcs()) {
+							relax(((AbstractNode)arc.getSourceNode()), ((AbstractNode)arc.getTargetNode()), arc.getArcContent().measure());
+						}				
+					}
+					//check for negative-weight cycles
+					for (Arc arc : owner.getArcs()) {
+						AbstractNode src = (AbstractNode) arc.getSourceNode();
+						AbstractNode dest = (AbstractNode) arc.getTargetNode();
+						//casting because of possible carries
+						if(dest.distance > (long)src.distance + arc.getArcContent().measure()){
+							throw new NegativeWeightCycleFoundException();
+						}
+					}
+					
 				default:
-
 					break;
 			}
 		}
 		
+		
 		List<Node> shortestPath = ((AbstractNode)destination).createTraversalNodePath();
+		int numHops = shortestPath.size();
+		int totalDistance = ((AbstractNode)shortestPath.get(numHops>0?numHops-1:0)).distance;
 		
 		NodePath nodePath = new NodePath(shortestPath, totalDistance);
 		
@@ -204,15 +227,18 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 		this.distance = 0;
 	}
 
-	private void relax(AbstractNode minNode, AbstractNode neighbor, int distanceBetween, NodeBasedBinaryHeap pq){
-		int uDistance = minNode.distance + distanceBetween;
+	/**
+	 * @return true if a relaxation of the neighbor occurred
+	 * **/
+	private boolean relax(AbstractNode minNode, AbstractNode neighbor, int distanceBetween){
+		long uDistance = (long)minNode.distance + distanceBetween;
 		if(neighbor.distance > uDistance){
-			neighbor.distance = uDistance;
+			neighbor.distance = (int)uDistance;
 			neighbor.traversalParent = minNode;
 			neighbor.traversalHops = minNode.traversalHops + 1;
-			pq.remove(neighbor);
-			pq.add(neighbor);
+			return true;
 		}
+		return false;
 	}
 
 	public boolean wasVisited() {

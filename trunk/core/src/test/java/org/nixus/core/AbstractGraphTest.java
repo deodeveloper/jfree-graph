@@ -10,6 +10,7 @@ import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
 import org.nixus.core.structure.nodes.Node;
 import org.nixus.core.structure.nodes.NodePath;
 
@@ -154,6 +155,31 @@ public abstract class AbstractGraphTest extends TestCase {
 		
 		assertEquals(3, nodes.size());
 		assertTrue(nodes.contains(node3));
+	}
+	
+	public void testGetArcs(){
+		Graph aGraph = buildGraph();
+		
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		
+		Arc arc12 = node1.addArcTo(node2, new MockContent());
+		
+		Collection<Arc> arcs = aGraph.getArcs();
+		
+		assertEquals(1, arcs.size());
+		Arc arc = arcs.iterator().next();
+		assertEquals(arc12, arc);
+		assertEquals(node1, arc.getSourceNode());
+		assertEquals(node2, arc.getTargetNode());
+		
+		node2.addArcTo(node1, new MockContent());
+		node2.addArcTo(node3, new MockContent());
+		node3.addArcTo(node2, new MockContent());
+		
+		assertEquals(4, arcs.size());
+		
 	}
 	
 	public void testSimpleDepthFirstTraversal(){
@@ -315,7 +341,70 @@ public abstract class AbstractGraphTest extends TestCase {
 		TraversalCountContent.totalTraversalCount = 0;
 	}
 	
-	public void testBinaryDijkstra(){
+//	public void testBinaryDijkstra(){
+//		Graph aGraph = buildGraph();
+//		
+//		Node node0 = aGraph.addNode(new MockContent());
+//		Node node1 = aGraph.addNode(new MockContent());
+//		Node node2 = aGraph.addNode(new MockContent());
+//		Node node3 = aGraph.addNode(new MockContent());
+//		Node node4 = aGraph.addNode(new MockContent());
+//		Node node5 = aGraph.addNode(new MockContent());
+//		Node node6 = aGraph.addNode(new MockContent());
+//		
+//		node0.addArc(node1, new MockContent(20));
+//		node0.addArc(node2, new MockContent(10));
+//		node3.addArc(node6, new MockContent(7));
+//		node1.addArc(node3, new MockContent(3));
+//		node3.addArc(node2, new MockContent(15));
+//		node2.addArc(node4, new MockContent(17));
+//		node1.addArc(node5, new MockContent(9));
+//		node5.addArc(node6, new MockContent(12));
+//		
+//		
+//		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+//		
+//		assertNotNull(shortestPath);
+//		assertEquals(30, shortestPath.getPathTotalDistance());
+//		List<Node> path = shortestPath.getPath();
+//		assertEquals(4,path.size());
+//		assertEquals(node0, path.get(0));
+//		assertEquals(node1, path.get(1));
+//		assertEquals(node3, path.get(2));
+//		assertEquals(node6, path.get(3));
+//		
+//	}
+//	
+//	public void testBinaryDijkstraUnreachableDestination(){
+//		Graph aGraph = buildGraph();
+//		
+//		Node node0 = aGraph.addNode(new MockContent());
+//		Node node1 = aGraph.addNode(new MockContent());
+//		Node node2 = aGraph.addNode(new MockContent());
+//		Node node3 = aGraph.addNode(new MockContent());
+//		Node node4 = aGraph.addNode(new MockContent());
+//		Node node5 = aGraph.addNode(new MockContent());
+//		Node node6 = aGraph.addNode(new MockContent());
+//		
+//		node0.addArc(node1, new MockContent(20));
+//		node0.addArc(node2, new MockContent(10));
+//		node1.addArc(node3, new MockContent(3));
+//		node3.addArc(node2, new MockContent(15));
+//		node2.addArc(node4, new MockContent(17));
+//		node1.addArc(node5, new MockContent(9));
+//		
+//		
+//		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+//		
+//		assertNotNull(shortestPath);
+//		assertEquals(Integer.MAX_VALUE, shortestPath.getPathTotalDistance());
+//		List<Node> path = shortestPath.getPath();
+//		assertNotNull(path);
+//		assertEquals(0,path.size());
+//		
+//	}
+	
+	public void testBellmanFordPositiveArcs(){
 		Graph aGraph = buildGraph();
 		
 		Node node0 = aGraph.addNode(new MockContent());
@@ -336,7 +425,7 @@ public abstract class AbstractGraphTest extends TestCase {
 		node5.addArc(node6, new MockContent(12));
 		
 		
-		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BELLMAN_FORD);
 		
 		assertNotNull(shortestPath);
 		assertEquals(30, shortestPath.getPathTotalDistance());
@@ -346,10 +435,9 @@ public abstract class AbstractGraphTest extends TestCase {
 		assertEquals(node1, path.get(1));
 		assertEquals(node3, path.get(2));
 		assertEquals(node6, path.get(3));
-		
 	}
 	
-	public void testBinaryDijkstraUnreachableDestination(){
+	public void testBellmanFordNegativeArcs(){
 		Graph aGraph = buildGraph();
 		
 		Node node0 = aGraph.addNode(new MockContent());
@@ -362,20 +450,55 @@ public abstract class AbstractGraphTest extends TestCase {
 		
 		node0.addArc(node1, new MockContent(20));
 		node0.addArc(node2, new MockContent(10));
+		node3.addArc(node6, new MockContent(7));
 		node1.addArc(node3, new MockContent(3));
 		node3.addArc(node2, new MockContent(15));
 		node2.addArc(node4, new MockContent(17));
-		node1.addArc(node5, new MockContent(9));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArc(node6, new MockContent(10));
 		
 		
-		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BELLMAN_FORD);
 		
 		assertNotNull(shortestPath);
-		assertEquals(Integer.MAX_VALUE, shortestPath.getPathTotalDistance());
+		assertEquals(21, shortestPath.getPathTotalDistance());
 		List<Node> path = shortestPath.getPath();
-		assertNotNull(path);
-		assertEquals(0,path.size());
+		assertEquals(4,path.size());
+		assertEquals(node0, path.get(0));
+		assertEquals(node1, path.get(1));
+		assertEquals(node5, path.get(2));
+		assertEquals(node6, path.get(3));
 		
+	}
+	
+	
+	public void testBellmanFordNegativeWeightedCycle(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		
+		node0.addArc(node1, new MockContent(20));
+		node0.addArc(node2, new MockContent(10));
+		node3.addArc(node6, new MockContent(7));
+		node1.addArc(node3, new MockContent(3));
+		node3.addArc(node2, new MockContent(15));
+		node2.addArc(node4, new MockContent(17));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArcTo(node1, new MockContent(8));
+		node5.addArc(node6, new MockContent(10));
+		
+		try {
+			node0.findShortestPathTo(node6, ShortestPathStrategy.BELLMAN_FORD);
+			fail();
+		} catch (NegativeWeightCycleFoundException e) {
+			
+		}
 	}
 
 	private class MockContent implements Measurable<MockContent>{
