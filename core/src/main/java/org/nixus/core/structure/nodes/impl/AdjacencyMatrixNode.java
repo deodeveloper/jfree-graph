@@ -46,6 +46,7 @@ public class AdjacencyMatrixNode extends AbstractNode {
 		this.validateNodeIsInTheSameGraph(aNode);
 		Arc arc = new ArcImpl(this, aNode, arcContent);
 		((AdjacencyMatrixGraph)owner).getAdjacencyMatrix()[this.index][((AdjacencyMatrixNode)aNode).index] = arc;
+		((AbstractGraph)this.getOwner()).addArc(arc);
 		aNode.addArcTo(this, arcContent);
 		return arc;
 	}

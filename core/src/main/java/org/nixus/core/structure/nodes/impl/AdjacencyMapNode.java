@@ -49,6 +49,7 @@ public class AdjacencyMapNode extends AbstractNode {
 		this.validateNodeIsInTheSameGraph(aNode);
 		Arc arc = new ArcImpl(this, aNode, arcContent);
 		this.arcsOut.put(aNode, arc);
+		((AbstractGraph)this.getOwner()).addArc(arc);
 		aNode.addArcTo(this, arcContent);
 		return arc;
 	}

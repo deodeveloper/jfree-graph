@@ -44,13 +44,13 @@ public interface Graph extends Serializable, Collection<Node>{
 	public int size();
 	
 	/**
-	 * Returns the nodes of this graph. The list is expected to be used as a read only. least 
+	 * Returns the nodes of this graph. The list is expected to be used as a read only.  
 	 * Modifications may turn in unexpected results.
 	 * */
 	public List<Node> getNodes();
 	
 	/**
-	 * Returns the arcs of this graph. The list is expected to be used as a read only. least 
+	 * Returns the arcs of this graph. The list is expected to be used as a read only. 
 	 * Modifications may turn in unexpected results.
 	 * */
 	public List<Arc> getArcs();
