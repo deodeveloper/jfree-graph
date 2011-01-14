@@ -33,11 +33,10 @@ public class AdjacencyMatrixNode extends AbstractNode {
 	}
 
 	@Override
-	public Arc addArcTo(Node targetNode, Measurable<? extends Object> arcContent) {
+	public Arc addArcToImplementation(Node targetNode, Measurable<? extends Object> arcContent) {
 		this.validateNodeIsInTheSameGraph(targetNode);
 		Arc arc = new ArcImpl(this, targetNode, arcContent);
 		((AdjacencyMatrixGraph)owner).getAdjacencyMatrix()[this.index][((AdjacencyMatrixNode)targetNode).index] = arc;
-		((AbstractGraph)this.getOwner()).addArc(arc);
 		return arc;
 	}
 	
