@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.Node;
 
 /**
@@ -88,5 +89,12 @@ public interface Graph extends Serializable, Collection<Node>{
 	 * @return the List of nodes in the traverse order.
 	 * */
 	public List<Node> breathFirstTraversal(Node start);
+	
+	/**
+	 * @return the list of nodes of this graph in topological order.
+	 * @throws NotADirectedAcyclicGraphException when the graph is not a directed acyclic graph. 
+	 * In this case a topological order is absurd  
+	 * */
+	public List<Node> getNodesInTopologicalOrder() throws NotADirectedAcyclicGraphException;
 	
 }

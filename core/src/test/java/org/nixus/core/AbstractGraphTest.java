@@ -11,6 +11,7 @@ import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
 import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
+import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.Node;
 import org.nixus.core.structure.nodes.NodePath;
 
@@ -500,7 +501,76 @@ public abstract class AbstractGraphTest extends TestCase {
 			
 		}
 	}
+	
+	public void testTopologicalOrder(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		Node node7 = aGraph.addNode(new MockContent());
+		
+		node0.addArcTo(node1, new MockContent(20));
+		node0.addArcTo(node2, new MockContent(-10));
+		node3.addArcTo(node2, new MockContent(15));
+		node3.addArcTo(node6, new MockContent(7));
+		node2.addArcTo(node4, new MockContent(3));
+		node6.addArcTo(node4, new MockContent(3));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArcTo(node7, new MockContent(8));
+		
+		List<Node> topologicalOrderedNodeList = aGraph.getNodesInTopologicalOrder();
+		
+		assertNotNull(topologicalOrderedNodeList);
+		assertEquals(8, topologicalOrderedNodeList.size());
+		assertEquals(node0, topologicalOrderedNodeList.get(0));
+		assertEquals(node3, topologicalOrderedNodeList.get(1));
+		assertEquals(node1, topologicalOrderedNodeList.get(2));
+		assertEquals(node2, topologicalOrderedNodeList.get(3));
+		assertEquals(node6, topologicalOrderedNodeList.get(4));
+		assertEquals(node5, topologicalOrderedNodeList.get(5));
+		assertEquals(node4, topologicalOrderedNodeList.get(6));
+		assertEquals(node7, topologicalOrderedNodeList.get(7));
+		
+		
+	}
 
+	public void testTopologicalOrderForNoDAG(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		Node node7 = aGraph.addNode(new MockContent());
+		
+		node0.addArcTo(node1, new MockContent(20));
+		node0.addArcTo(node2, new MockContent(-10));
+		node3.addArcTo(node2, new MockContent(15));
+		node3.addArcTo(node6, new MockContent(7));
+		node2.addArcTo(node4, new MockContent(3));
+		node6.addArcTo(node4, new MockContent(3));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArcTo(node7, new MockContent(8));
+		node5.addArcTo(node0, new MockContent(8));
+		try {
+			aGraph.getNodesInTopologicalOrder();
+			fail();
+		} catch (NotADirectedAcyclicGraphException e) {
+			//Expected
+		} catch (Exception e) {
+			fail();
+		}
+	}
+
+	
 	private class MockContent implements Measurable<MockContent>{
 		
 		int distance;

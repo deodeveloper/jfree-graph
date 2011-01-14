@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.nixus.core.strategies.ShortestPathStrategy;
+import org.nixus.core.structure.AbstractGraph;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
@@ -62,6 +63,16 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	 * Number of hops to reach  this node during the last traversal
 	 * */
 	private int traversalHops;
+
+	/**
+	 * Number of incoming arcs/edges this node has
+	 * */
+	private int numIncomingArcs;
+
+	/**
+	 * Used for some algorithms (e.g. topological order)
+	 * */
+	private int numCurrentIncomingArcs;
 	
 	
 	/**
@@ -72,6 +83,9 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	protected AbstractNode(Graph owner, Measurable<? extends Object> content) {
 		this.owner = owner;
 		this.wasVisited = false;
+
+		this.numIncomingArcs = 0;
+		this.numCurrentIncomingArcs = 0;
 		
 		if(content == null){
 			this.content = new NullNodeContent();
@@ -117,6 +131,22 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 		return reachableNeighbors;
 	}
 	
+	@Override
+	public Arc addArcTo(Node targetNode, Measurable<? extends Object> arcContent){
+		Arc arc = addArcToImplementation(targetNode, arcContent);
+		((AbstractGraph)this.getOwner()).addArc(arc);
+		((AbstractNode)targetNode).incrementIncomingArcs();
+		return arc;
+	}
+	
+	private void incrementIncomingArcs() {
+		this.numIncomingArcs++;
+		this.numCurrentIncomingArcs++;
+	}
+
+	protected abstract Arc addArcToImplementation(Node targetNode,
+			Measurable<? extends Object> arcContent);
+
 	@Override
 	public void setTag(String tag) {
 		this.tag = tag;
@@ -263,5 +293,26 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	@Override
 	public void setInsertionOrder(int insertionOrder) {
 		this.insertionOrder = insertionOrder;
+	}
+
+	/**
+	 * Used for topological sort algorithm
+	 * */
+	public void resetCurrentIncomingArcs() {
+		this.numCurrentIncomingArcs = this.numIncomingArcs;
+	}
+
+	/**
+	 * Used for topological sort algorithm
+	 * */
+	public void decCurrentIncomingArcs() {
+		this.numCurrentIncomingArcs--;
+	}
+
+	/**
+	 * Used for topological sort algorithm
+	 * */
+	public boolean hasNoMoreIncomingArcs() {
+		return this.numCurrentIncomingArcs == 0;
 	}
 }

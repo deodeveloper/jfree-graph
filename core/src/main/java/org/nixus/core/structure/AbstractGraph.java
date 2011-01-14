@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.AbstractNode;
 import org.nixus.core.structure.nodes.HiddenNodeAbstraction;
 import org.nixus.core.structure.nodes.Node;
@@ -164,6 +165,51 @@ public abstract class AbstractGraph implements Graph {
 	}
 	
 	@Override
+	public List<Node> getNodesInTopologicalOrder() throws NotADirectedAcyclicGraphException{
+		List<Node> topologicalSortedNodeList = new ArrayList<Node>(this.nodeCount);
+		
+		Queue<Node> startNodes = initializeTopologicalOrder();
+		
+		int numEdges = this.getArcs().size();
+		
+		//process algorithm
+		while(!startNodes.isEmpty()){
+			Node from = startNodes.poll();
+			topologicalSortedNodeList.add(from);
+			for (Node to : from.getReachableNeighbors()) {
+				AbstractNode toNode = (AbstractNode)to;
+				toNode.decCurrentIncomingArcs();
+				numEdges--;
+				if(toNode.hasNoMoreIncomingArcs()){
+					startNodes.add(toNode);
+				}
+			}
+		}
+		//Is this really a DAG?
+		if(numEdges > 0){
+			throw new NotADirectedAcyclicGraphException("his Graph is not a Directed Acyclic Graph.");
+		}
+		
+		return topologicalSortedNodeList;
+	}
+	
+	/**
+	 * Initializes the graph for the algorithm and 
+	 * returns the start nodes of the algorithm (nodes 
+	 * with no incoming arcs/edges)
+	 * */
+	private Queue<Node> initializeTopologicalOrder() {
+		Queue<Node> startNodes = new LinkedList<Node>();
+		for (Node node : this.getNodes()) {
+			((AbstractNode)node).resetCurrentIncomingArcs();
+			if(node.getArcsIn().size() == 0){
+				startNodes.add(node);
+			}
+		}
+		return startNodes;
+	}
+
+	@Override
 	public boolean contains(Object o) {
 		// TODO Auto-generated method stub
 		return false;
@@ -193,7 +239,6 @@ public abstract class AbstractGraph implements Graph {
 		this.addNode(e.getContent());
 		return true;
 	}
-
 
 	@Override
 	public boolean remove(Object o) {
