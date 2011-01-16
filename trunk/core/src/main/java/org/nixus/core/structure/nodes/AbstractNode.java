@@ -214,23 +214,35 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 							throw new NegativeWeightCycleFoundException();
 						}
 					}
-					
+					break;
+				case DAG:
+					List<Node> nodesInTopologicalOrder = this.owner.getNodesInTopologicalOrder();
+					initializeGraphForShortestPath(nodes);
+					for (Node node : nodesInTopologicalOrder) {
+						for (Arc arc : node.getArcsOut()) {
+							relax((AbstractNode)node, (AbstractNode)arc.getTargetNode(), arc.getArcContent().measure());
+						}
+					}
+					break;
 				default:
 					break;
 			}
 		}
 		
 		
-		List<Node> shortestPath = ((AbstractNode)destination).createTraversalNodePath();
+		List<Node> shortestPath = ((AbstractNode)destination).createTraversalNodePath(this);
 		int numHops = shortestPath.size();
-		int totalDistance = ((AbstractNode)shortestPath.get(numHops>0?numHops-1:0)).distance;
+		int totalDistance = Integer.MAX_VALUE;
+		if(numHops > 0){
+			totalDistance = ((AbstractNode)shortestPath.get(numHops-1)).distance;
+		} 
 		
 		NodePath nodePath = new NodePath(shortestPath, totalDistance);
 		
 		return nodePath;
 	}
 
-	private List<Node> createTraversalNodePath() {
+	private List<Node> createTraversalNodePath(AbstractNode source) {
 		int size = this.traversalHops + 1;
 		if(size <= 1){
 			return new ArrayList<Node>();
@@ -240,6 +252,10 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 		for(int i = size-1; i >= 0; i--){
 			result[i] = cNode;
 			cNode = cNode.traversalParent;
+		}
+		//Did we got an answer?
+		if(!result[0].equals(source)){
+			return new ArrayList<Node>();
 		}
 		return Arrays.asList(result);
 	}
