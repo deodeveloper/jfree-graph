@@ -342,70 +342,44 @@ public abstract class AbstractGraphTest extends TestCase {
 		TraversalCountContent.totalTraversalCount = 0;
 	}
 	
-//	public void testBinaryDijkstra(){
-//		Graph aGraph = buildGraph();
-//		
-//		Node node0 = aGraph.addNode(new MockContent());
-//		Node node1 = aGraph.addNode(new MockContent());
-//		Node node2 = aGraph.addNode(new MockContent());
-//		Node node3 = aGraph.addNode(new MockContent());
-//		Node node4 = aGraph.addNode(new MockContent());
-//		Node node5 = aGraph.addNode(new MockContent());
-//		Node node6 = aGraph.addNode(new MockContent());
-//		
-//		node0.addArc(node1, new MockContent(20));
-//		node0.addArc(node2, new MockContent(10));
-//		node3.addArc(node6, new MockContent(7));
-//		node1.addArc(node3, new MockContent(3));
-//		node3.addArc(node2, new MockContent(15));
-//		node2.addArc(node4, new MockContent(17));
-//		node1.addArc(node5, new MockContent(9));
-//		node5.addArc(node6, new MockContent(12));
-//		
-//		
-//		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
-//		
-//		assertNotNull(shortestPath);
-//		assertEquals(30, shortestPath.getPathTotalDistance());
-//		List<Node> path = shortestPath.getPath();
-//		assertEquals(4,path.size());
-//		assertEquals(node0, path.get(0));
-//		assertEquals(node1, path.get(1));
-//		assertEquals(node3, path.get(2));
-//		assertEquals(node6, path.get(3));
-//		
-//	}
-//	
-//	public void testBinaryDijkstraUnreachableDestination(){
-//		Graph aGraph = buildGraph();
-//		
-//		Node node0 = aGraph.addNode(new MockContent());
-//		Node node1 = aGraph.addNode(new MockContent());
-//		Node node2 = aGraph.addNode(new MockContent());
-//		Node node3 = aGraph.addNode(new MockContent());
-//		Node node4 = aGraph.addNode(new MockContent());
-//		Node node5 = aGraph.addNode(new MockContent());
-//		Node node6 = aGraph.addNode(new MockContent());
-//		
-//		node0.addArc(node1, new MockContent(20));
-//		node0.addArc(node2, new MockContent(10));
-//		node1.addArc(node3, new MockContent(3));
-//		node3.addArc(node2, new MockContent(15));
-//		node2.addArc(node4, new MockContent(17));
-//		node1.addArc(node5, new MockContent(9));
-//		
-//		
-//		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
-//		
-//		assertNotNull(shortestPath);
-//		assertEquals(Integer.MAX_VALUE, shortestPath.getPathTotalDistance());
-//		List<Node> path = shortestPath.getPath();
-//		assertNotNull(path);
-//		assertEquals(0,path.size());
-//		
-//	}
+	public void testBinaryDijkstra(){
+		Graph aGraph = buildGraph();
+		
+		Node nodePre = aGraph.addNode(new MockContent());
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		
+		nodePre.addArc(node0, new MockContent(10));
+		node0.addArc(node1, new MockContent(20));
+		node0.addArc(node2, new MockContent(10));
+		node3.addArc(node6, new MockContent(7));
+		node1.addArc(node3, new MockContent(3));
+		node3.addArc(node2, new MockContent(15));
+		node2.addArc(node4, new MockContent(17));
+		node1.addArc(node5, new MockContent(9));
+		node5.addArc(node6, new MockContent(12));
+		
+		
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		
+		assertNotNull(shortestPath);
+		assertTrue(shortestPath.pathFound());
+		assertEquals(30, shortestPath.getPathTotalDistance());
+		List<Node> path = shortestPath.getPath();
+		assertEquals(4,path.size());
+		assertEquals(node0, path.get(0));
+		assertEquals(node1, path.get(1));
+		assertEquals(node3, path.get(2));
+		assertEquals(node6, path.get(3));
+		
+	}
 	
-	public void testBellmanFordPositiveArcs(){
+	public void testBinaryDijkstraUnreachableDestination(){
 		Graph aGraph = buildGraph();
 		
 		Node node0 = aGraph.addNode(new MockContent());
@@ -416,6 +390,38 @@ public abstract class AbstractGraphTest extends TestCase {
 		Node node5 = aGraph.addNode(new MockContent());
 		Node node6 = aGraph.addNode(new MockContent());
 		
+		node0.addArc(node1, new MockContent(20));
+		node0.addArc(node2, new MockContent(10));
+		node1.addArc(node3, new MockContent(3));
+		node3.addArc(node2, new MockContent(15));
+		node2.addArc(node4, new MockContent(17));
+		node1.addArc(node5, new MockContent(9));
+		
+		
+		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BINARY_DIJKSTRA);
+		
+		assertNotNull(shortestPath);
+		assertFalse(shortestPath.pathFound());
+		assertEquals(Integer.MAX_VALUE, shortestPath.getPathTotalDistance());
+		List<Node> path = shortestPath.getPath();
+		assertNotNull(path);
+		assertEquals(0,path.size());
+		
+	}
+	
+	public void testBellmanFordPositiveArcs(){
+		Graph aGraph = buildGraph();
+		
+		Node nodePre = aGraph.addNode(new MockContent());
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		
+		nodePre.addArc(node0, new MockContent(20));
 		node0.addArc(node1, new MockContent(20));
 		node0.addArc(node2, new MockContent(10));
 		node3.addArc(node6, new MockContent(7));
@@ -429,6 +435,7 @@ public abstract class AbstractGraphTest extends TestCase {
 		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BELLMAN_FORD);
 		
 		assertNotNull(shortestPath);
+		assertTrue(shortestPath.pathFound());
 		assertEquals(30, shortestPath.getPathTotalDistance());
 		List<Node> path = shortestPath.getPath();
 		assertEquals(4,path.size());
@@ -441,6 +448,7 @@ public abstract class AbstractGraphTest extends TestCase {
 	public void testBellmanFordNegativeArcs(){
 		Graph aGraph = buildGraph();
 		
+		Node nodePre = aGraph.addNode(new MockContent());
 		Node node0 = aGraph.addNode(new MockContent());
 		Node node1 = aGraph.addNode(new MockContent());
 		Node node2 = aGraph.addNode(new MockContent());
@@ -449,6 +457,7 @@ public abstract class AbstractGraphTest extends TestCase {
 		Node node5 = aGraph.addNode(new MockContent());
 		Node node6 = aGraph.addNode(new MockContent());
 		
+		nodePre.addArc(node0, new MockContent(20));
 		node0.addArc(node1, new MockContent(20));
 		node0.addArc(node2, new MockContent(10));
 		node3.addArc(node6, new MockContent(7));
@@ -462,6 +471,7 @@ public abstract class AbstractGraphTest extends TestCase {
 		NodePath shortestPath = node0.findShortestPathTo(node6, ShortestPathStrategy.BELLMAN_FORD);
 		
 		assertNotNull(shortestPath);
+		assertTrue(shortestPath.pathFound());
 		assertEquals(21, shortestPath.getPathTotalDistance());
 		List<Node> path = shortestPath.getPath();
 		assertEquals(4,path.size());
@@ -475,6 +485,7 @@ public abstract class AbstractGraphTest extends TestCase {
 	
 	public void testBellmanFordNegativeWeightedCycle(){
 		Graph aGraph = buildGraph();
+		
 		
 		Node node0 = aGraph.addNode(new MockContent());
 		Node node1 = aGraph.addNode(new MockContent());
@@ -535,8 +546,6 @@ public abstract class AbstractGraphTest extends TestCase {
 		assertEquals(node5, topologicalOrderedNodeList.get(5));
 		assertEquals(node4, topologicalOrderedNodeList.get(6));
 		assertEquals(node7, topologicalOrderedNodeList.get(7));
-		
-		
 	}
 
 	public void testTopologicalOrderForNoDAG(){
@@ -569,7 +578,68 @@ public abstract class AbstractGraphTest extends TestCase {
 			fail();
 		}
 	}
+	
+	public void testDAGShortestPath(){
+		Graph aGraph = buildGraph();
+		
+		Node nodePre = aGraph.addNode(new MockContent());
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		Node node7 = aGraph.addNode(new MockContent());
+		
+		nodePre.addArcTo(node3, new MockContent(20));
+		node0.addArcTo(node1, new MockContent(20));
+		node0.addArcTo(node2, new MockContent(-10));
+		node3.addArcTo(node2, new MockContent(15));
+		node3.addArcTo(node6, new MockContent(7));
+		node2.addArcTo(node4, new MockContent(3));
+		node6.addArcTo(node4, new MockContent(3));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArcTo(node7, new MockContent(8));
+		
+		NodePath nodePath =  node3.findShortestPathTo(node4, ShortestPathStrategy.DAG);
+		
+		assertNotNull(nodePath);
+		assertEquals(10, nodePath.getPathTotalDistance());
+		assertTrue(nodePath.pathFound());
+		List<Node> path = nodePath.getPath();
+		assertEquals(3, path.size());
+		assertEquals(node3, path.get(0));
+		assertEquals(node6, path.get(1));
+		assertEquals(node4, path.get(2));
+	}
 
+	public void testDAGShortestPathNotFound(){
+		Graph aGraph = buildGraph();
+		
+		Node node0 = aGraph.addNode(new MockContent());
+		Node node1 = aGraph.addNode(new MockContent());
+		Node node2 = aGraph.addNode(new MockContent());
+		Node node3 = aGraph.addNode(new MockContent());
+		Node node4 = aGraph.addNode(new MockContent());
+		Node node5 = aGraph.addNode(new MockContent());
+		Node node6 = aGraph.addNode(new MockContent());
+		Node node7 = aGraph.addNode(new MockContent());
+		
+		node0.addArcTo(node1, new MockContent(20));
+		node0.addArcTo(node2, new MockContent(-10));
+		node3.addArcTo(node2, new MockContent(15));
+		node3.addArcTo(node6, new MockContent(7));
+		node2.addArcTo(node4, new MockContent(3));
+		node6.addArcTo(node4, new MockContent(3));
+		node1.addArcTo(node5, new MockContent(-9));
+		node5.addArcTo(node7, new MockContent(8));
+		
+		NodePath nodePath =  node3.findShortestPathTo(node7, ShortestPathStrategy.DAG);
+		
+		assertNotNull(nodePath);
+		assertFalse(nodePath.pathFound());
+	}
 	
 	private class MockContent implements Measurable<MockContent>{
 		
@@ -600,3 +670,4 @@ public abstract class AbstractGraphTest extends TestCase {
 		}
 	}
 }
+

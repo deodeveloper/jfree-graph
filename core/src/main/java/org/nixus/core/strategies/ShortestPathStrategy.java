@@ -17,5 +17,11 @@ public enum ShortestPathStrategy {
 	 * present(finding the shortest path is absurd in this cases), so a NegativeWeightCycleFoundException
 	 * is thrown if it is the case. 
 	 * */
-	BELLMAN_FORD
+	BELLMAN_FORD,
+	/**
+	 * This strategy will find the shortest path with a complexity expected of O(E + V), but only
+	 * works on Directed Acyclic Graphs(DAG). In case the graph is not a DAG a {@link NotADirectedAcyclicGraphException}
+	 * is thrown.
+	 * */
+	DAG
 }

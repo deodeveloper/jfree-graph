@@ -25,6 +25,6 @@ public class NodePath {
 	 * found or not to destination 
 	 * */
 	public boolean pathFound(){
-		return pathTotalDistance != Integer.MAX_VALUE;
+		return this.path.size() > 0;
 	}
 }
