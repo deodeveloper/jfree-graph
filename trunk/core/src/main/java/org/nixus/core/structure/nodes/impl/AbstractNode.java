@@ -1,4 +1,4 @@
-package org.nixus.core.structure.nodes;
+package org.nixus.core.structure.nodes.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +16,9 @@ import org.nixus.core.structure.auxiliary.NullNodeContent;
 import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
 import org.nixus.core.structure.exceptions.NodeNotInThisGraphException;
 import org.nixus.core.structure.impl.AbstractGraph;
+import org.nixus.core.structure.nodes.HiddenNodeAbstraction;
+import org.nixus.core.structure.nodes.Node;
+import org.nixus.core.structure.nodes.NodePath;
 
 
 

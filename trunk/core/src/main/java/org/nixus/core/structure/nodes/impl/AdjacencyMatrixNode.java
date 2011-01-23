@@ -10,7 +10,6 @@ import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.impl.AbstractGraph;
 import org.nixus.core.structure.impl.AdjacencyMatrixGraph;
 import org.nixus.core.structure.impl.ArcImpl;
-import org.nixus.core.structure.nodes.AbstractNode;
 import org.nixus.core.structure.nodes.Node;
 
 

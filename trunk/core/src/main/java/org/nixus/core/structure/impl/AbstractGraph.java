@@ -13,9 +13,9 @@ import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeVisitor;
 import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
-import org.nixus.core.structure.nodes.AbstractNode;
 import org.nixus.core.structure.nodes.HiddenNodeAbstraction;
 import org.nixus.core.structure.nodes.Node;
+import org.nixus.core.structure.nodes.impl.AbstractNode;
 
 public abstract class AbstractGraph implements Graph {
 
