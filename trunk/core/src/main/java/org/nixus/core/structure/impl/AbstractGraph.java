@@ -213,8 +213,7 @@ public abstract class AbstractGraph implements Graph {
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return nodes.contains(o);
 	}
 
 
@@ -243,9 +242,12 @@ public abstract class AbstractGraph implements Graph {
 	}
 
 	@Override
+	/**
+	 * Not supported
+	 * */
 	public boolean remove(Object o) {
 		//TODO: implement
-		throw new RuntimeException("Not yet implemented");
+		throw new RuntimeException("Not yet supported");
 	}
 
 
@@ -265,6 +267,9 @@ public abstract class AbstractGraph implements Graph {
 
 
 	@Override
+	/**
+	 * Not supported
+	 * */
 	public boolean removeAll(Collection<?> c) {
 		for (Object node : c) {
 			this.remove(node);
@@ -275,17 +280,21 @@ public abstract class AbstractGraph implements Graph {
 
 	@Override
 	/**
-	 * Not Implemented
+	 * Not supported
 	 * */
 	public boolean retainAll(Collection<?> c) {
-		throw new RuntimeException("Not implemented operation");
+		throw new RuntimeException("Not supported operation");
 	}
 
 
 	@Override
+	/**
+	 * Not supported
+	 * */
 	public void clear() {
-		//TODO: implement
-		throw new RuntimeException("Not yet implemented");
+		for (Object node : this.nodes) {
+			this.remove(node);
+		}
 	}
 	
 }
