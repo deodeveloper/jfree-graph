@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.nixus.core.structure.AbstractGraph;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
+import org.nixus.core.structure.impl.AbstractGraph;
 import org.nixus.core.structure.impl.AdjacencyMatrixGraph;
 import org.nixus.core.structure.impl.ArcImpl;
 import org.nixus.core.structure.nodes.AbstractNode;

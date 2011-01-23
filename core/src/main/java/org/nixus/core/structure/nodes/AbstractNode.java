@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.nixus.core.strategies.ShortestPathStrategy;
-import org.nixus.core.structure.AbstractGraph;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
@@ -16,6 +15,7 @@ import org.nixus.core.structure.auxiliary.NodeBasedBinaryHeap;
 import org.nixus.core.structure.auxiliary.NullNodeContent;
 import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
 import org.nixus.core.structure.exceptions.NodeNotInThisGraphException;
+import org.nixus.core.structure.impl.AbstractGraph;
 
 
 

@@ -2,7 +2,6 @@ package org.nixus.core.structure.impl;
 
 import java.util.ArrayList;
 
-import org.nixus.core.structure.AbstractGraph;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.nodes.Node;
@@ -19,14 +18,14 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
 	
 	private int currentMatrixSize;
 
-	private float growthFactor;
+	private final float growthFactor;
 	
 	
 	/**
 	 * Creates a graph with the initial size of the underling adjacency matrix being 64 
 	 * and the growth factor 1.5 
 	 * */
-	public AdjacencyMatrixGraph(){
+	protected AdjacencyMatrixGraph(){
 		this(64, 1.5F);
 	}
 	
@@ -35,7 +34,7 @@ public class AdjacencyMatrixGraph extends AbstractGraph {
 	 * @param growthFactor a number(must be grater than 1) that specifies by how much 
 	 * 	will grow the underling adjacency matrix if space isn't enough to hold a new node.   
 	 * */
-	public AdjacencyMatrixGraph(int initialSize, float growthFactor) {
+	protected AdjacencyMatrixGraph(final int initialSize, final float growthFactor) {
 		this.nodes = new ArrayList<Node>();
 		this.nodeCount = 0;
 		this.adjacencyMatrix = new Arc[initialSize][initialSize];
