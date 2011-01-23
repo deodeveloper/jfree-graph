@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.nixus.core.structure.auxiliary.Measurable;
-import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.auxiliary.NodeVisitor;
 import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.Node;
 
@@ -63,7 +63,7 @@ public interface Graph extends Serializable, Collection<Node>{
 	 * @param transformer object to transform the node content when traversing.
 	 * @return the List of nodes in the traverse order with the transformation done. 
 	 * */
-	public List<Node> depthFirstTraversal(Node start, NodeTransformer<Node> transformer);
+	public List<Node> depthFirstTraversal(Node start, NodeVisitor transformer);
 	
 	/**
 	 * Makes a depth first traversal on the graph and returns the List of nodes 
@@ -80,7 +80,7 @@ public interface Graph extends Serializable, Collection<Node>{
 	 * @param transformer object to transform the node content when traversing. 
 	 * @return the List of nodes in the traverse order with the transformation done. 
 	 * */
-	public List<Node> breathFirstTraversal(Node start, NodeTransformer<Node> transformer);
+	public List<Node> breathFirstTraversal(Node start, NodeVisitor transformer);
 	
 	/**
 	 * Makes a breath first traversal on the graph and returns the List of nodes 
