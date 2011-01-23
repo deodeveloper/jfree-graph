@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.SortedSet;
 
-import org.nixus.core.structure.nodes.AbstractNode;
+import org.nixus.core.structure.nodes.impl.AbstractNode;
 
 /**
  * Specific binary priority queue based on the java implementation improved to have a O(log(N)) 
