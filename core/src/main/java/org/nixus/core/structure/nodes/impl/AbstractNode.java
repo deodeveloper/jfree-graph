@@ -287,8 +287,8 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	}
 	
 	private NodeBasedBinaryHeap asNodeBasedBinaryHeap(List<Node> nodes) {
-		@SuppressWarnings("unchecked")
-		NodeBasedBinaryHeap pq = new NodeBasedBinaryHeap((Collection<? extends AbstractNode>) nodes, new Comparator<AbstractNode>() {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		NodeBasedBinaryHeap pq = new NodeBasedBinaryHeap((Collection) nodes, new Comparator<AbstractNode>() {
 			@Override
 			public int compare(AbstractNode o1, AbstractNode o2) {
 				return o1.distance - o2.distance;
