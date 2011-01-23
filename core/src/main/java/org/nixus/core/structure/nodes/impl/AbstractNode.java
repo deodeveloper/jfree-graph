@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.nixus.core.strategies.ShortestPathStrategy;
 import org.nixus.core.structure.Arc;
@@ -166,66 +168,21 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public NodePath findShortestPathTo(Node destination,
-			ShortestPathStrategy strategy) {
+	public Map<Node,NodePath> findShortestPathToEveryOtherNode(ShortestPathStrategy strategy) {
 		int numNodes = this.owner.size();
 		List<Node> nodes = owner.getNodes();
+		initializeGraphForShortestPath(nodes);
 		
 		if(numNodes > 0){
 			switch (strategy) {
 				case BINARY_DIJKSTRA:
-					initializeGraphForShortestPath(nodes);
-					
-					NodeBasedBinaryHeap pq = new NodeBasedBinaryHeap((Collection<? extends AbstractNode>) nodes, new Comparator<AbstractNode>() {
-						@Override
-						public int compare(AbstractNode o1, AbstractNode o2) {
-							return o1.distance - o2.distance;
-						}
-					});
-					
-					AbstractNode currentNode = null;
-					while(!destination.equals(currentNode) && !pq.isEmpty()){
-						currentNode = (AbstractNode) pq.poll();
-						for (Arc arc : currentNode.getArcsOut()) {
-							AbstractNode neigboringNode = (AbstractNode) arc.getTargetNode();
-							int distance = arc.getArcContent().measure();
-							boolean relaxationOccurred = relax(currentNode, neigboringNode, distance);
-							//update priority queue
-							if(relaxationOccurred){
-								pq.remove(neigboringNode);
-								pq.add(neigboringNode);
-							}
-						}
-					}
+					allShortestPathsBinaryDijkstra(nodes);
 					break;
 				case BELLMAN_FORD:
-					initializeGraphForShortestPath(nodes);
-					
-					//Relax all edges #nodes - 1 times
-					for(int i = 1; i < nodes.size(); i++){
-						for (Arc arc : owner.getArcs()) {
-							relax(((AbstractNode)arc.getSourceNode()), ((AbstractNode)arc.getTargetNode()), arc.getArcContent().measure());
-						}				
-					}
-					//check for negative-weight cycles
-					for (Arc arc : owner.getArcs()) {
-						AbstractNode src = (AbstractNode) arc.getSourceNode();
-						AbstractNode dest = (AbstractNode) arc.getTargetNode();
-						//casting because of possible carries
-						if(dest.distance > (long)src.distance + arc.getArcContent().measure()){
-							throw new NegativeWeightCycleFoundException();
-						}
-					}
+					shortestPathBellmanFordAlgorithm(nodes);
 					break;
 				case DAG:
-					List<Node> nodesInTopologicalOrder = this.owner.getNodesInTopologicalOrder();
-					initializeGraphForShortestPath(nodes);
-					for (Node node : nodesInTopologicalOrder) {
-						for (Arc arc : node.getArcsOut()) {
-							relax((AbstractNode)node, (AbstractNode)arc.getTargetNode(), arc.getArcContent().measure());
-						}
-					}
+					shortestPathDAGAlgorithm(nodes);
 					break;
 				default:
 					break;
@@ -233,16 +190,158 @@ public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 		}
 		
 		
-		List<Node> shortestPath = ((AbstractNode)destination).createTraversalNodePath(this);
+		Map<Node,NodePath> nodePaths = new LinkedHashMap<Node, NodePath>();
+
+		//Build all paths
+		for (Node node : nodes) {
+			addNodePath(nodePaths, node);
+		}
+		
+		return nodePaths;
+	}
+
+	private List<Node> addNodePath(Map<Node, NodePath> nodePaths, Node node) {
+		if(node == null){
+			return new LinkedList<Node>();
+		}
+		NodePath nodePathBuild = nodePaths.get(node);
+		if(nodePathBuild != null){
+			return nodePathBuild.getPath();
+		} else {
+			AbstractNode cNode = (AbstractNode) node;
+			
+			List<Node> nodePath = new LinkedList<Node>();
+			
+			AbstractNode parent = cNode.traversalParent;
+			NodePath parentPath = nodePaths.get(parent);
+			//was parent node path already build? 
+			if(parentPath != null){
+				nodePath.addAll(parentPath.getPath());
+			} else {
+				nodePath.addAll(addNodePath(nodePaths, parent));
+			}
+			if(nodePath.size()>0 || cNode == this){
+				nodePath.add(cNode);
+			}
+			
+			nodePathBuild = buildNodePath(nodePath);
+			nodePaths.put(cNode, nodePathBuild);
+			return nodePath;
+		}
+	}
+
+	private NodePath buildNodePath(List<Node> shortestPath) {
 		int numHops = shortestPath.size();
 		int totalDistance = Integer.MAX_VALUE;
 		if(numHops > 0){
 			totalDistance = ((AbstractNode)shortestPath.get(numHops-1)).distance;
 		} 
-		
 		NodePath nodePath = new NodePath(shortestPath, totalDistance);
+		return nodePath;
+	};
+	
+	@Override
+	public NodePath findShortestPathTo(Node destination,
+			ShortestPathStrategy strategy) {
+		int numNodes = this.owner.size();
+		List<Node> nodes = owner.getNodes();
+		initializeGraphForShortestPath(nodes);
+		
+		if(numNodes > 0){
+			switch (strategy) {
+				case BINARY_DIJKSTRA:
+					singleShortestPathBinaryDijkstra(destination, nodes);
+					break;
+				case BELLMAN_FORD:
+					shortestPathBellmanFordAlgorithm(nodes);
+					break;
+				case DAG:
+					shortestPathDAGAlgorithm(nodes);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		List<Node> shortestPath = ((AbstractNode)destination).createTraversalNodePath(this);
+		NodePath nodePath = buildNodePath(shortestPath);
 		
 		return nodePath;
+	}
+
+	private void singleShortestPathBinaryDijkstra(Node destination,
+			List<Node> nodes) {
+		NodeBasedBinaryHeap pq = asNodeBasedBinaryHeap(nodes);
+		
+		AbstractNode currentNode = null;
+		while(!destination.equals(currentNode) && !pq.isEmpty()){
+			currentNode = dijkstraInnerLoop(pq);
+		}
+	}
+
+	private void allShortestPathsBinaryDijkstra(List<Node> nodes) {
+		NodeBasedBinaryHeap pq = asNodeBasedBinaryHeap(nodes);
+		
+		while(!pq.isEmpty()){
+			dijkstraInnerLoop(pq);
+		}
+	}
+	
+	private NodeBasedBinaryHeap asNodeBasedBinaryHeap(List<Node> nodes) {
+		@SuppressWarnings("unchecked")
+		NodeBasedBinaryHeap pq = new NodeBasedBinaryHeap((Collection<? extends AbstractNode>) nodes, new Comparator<AbstractNode>() {
+			@Override
+			public int compare(AbstractNode o1, AbstractNode o2) {
+				return o1.distance - o2.distance;
+			}
+		});
+		return pq;
+	}
+
+	/**
+	 * Gets the current node in the queue and relaxes its neighbors
+	 * */
+	private AbstractNode dijkstraInnerLoop(NodeBasedBinaryHeap pq) {
+		AbstractNode currentNode;
+		currentNode = (AbstractNode) pq.poll();
+		for (Arc arc : currentNode.getArcsOut()) {
+			AbstractNode neigboringNode = (AbstractNode) arc.getTargetNode();
+			int distance = arc.getArcContent().measure();
+			boolean relaxationOccurred = relax(currentNode, neigboringNode, distance);
+			//update priority queue
+			if(relaxationOccurred){
+				pq.remove(neigboringNode);
+				pq.add(neigboringNode);
+			}
+		}
+		return currentNode;
+	}
+
+	private void shortestPathDAGAlgorithm(List<Node> nodes) {
+		List<Node> nodesInTopologicalOrder = this.owner.getNodesInTopologicalOrder();
+		for (Node node : nodesInTopologicalOrder) {
+			for (Arc arc : node.getArcsOut()) {
+				relax((AbstractNode)node, (AbstractNode)arc.getTargetNode(), arc.getArcContent().measure());
+			}
+		}
+	}
+
+	private void shortestPathBellmanFordAlgorithm(List<Node> nodes) {
+		//Relax all edges #nodes - 1 times
+		for(int i = 1; i < nodes.size(); i++){
+			for (Arc arc : owner.getArcs()) {
+				relax(((AbstractNode)arc.getSourceNode()), ((AbstractNode)arc.getTargetNode()), arc.getArcContent().measure());
+			}				
+		}
+		//check for negative-weight cycles
+		for (Arc arc : owner.getArcs()) {
+			AbstractNode src = (AbstractNode) arc.getSourceNode();
+			AbstractNode dest = (AbstractNode) arc.getTargetNode();
+			//casting because of possible carries
+			if(dest.distance > (long)src.distance + arc.getArcContent().measure()){
+				throw new NegativeWeightCycleFoundException();
+			}
+		}
 	}
 
 	private List<Node> createTraversalNodePath(AbstractNode source) {

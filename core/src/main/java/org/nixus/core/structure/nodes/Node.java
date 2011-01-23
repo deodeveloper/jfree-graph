@@ -3,6 +3,7 @@ package org.nixus.core.structure.nodes;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.nixus.core.strategies.ShortestPathStrategy;
 import org.nixus.core.structure.Arc;
@@ -84,4 +85,11 @@ public interface Node extends Serializable, Comparable<Node>{
 	 * the distance in the node path will be Integer.MAX_VALUE
 	 * */
 	NodePath findShortestPathTo(Node destination, ShortestPathStrategy strategy);
+	
+	/**
+	 * Finds the shortest path from this node to every other node in this graph. If target node could not be reached, 
+	 * the distance in the node path will be Integer.MAX_VALUE
+	 * @return a map with all the paths with the destination node as its key.
+	 * */
+	Map<Node, NodePath> findShortestPathToEveryOtherNode(ShortestPathStrategy strategy);
 }
