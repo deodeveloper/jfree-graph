@@ -1,11 +1,11 @@
 = Getting Started=
 
-The first think we need to do is to create our graph. At the moment of this writing there are 2 underlying implementations of the Graph interface: the _TestAdjacencyMatrixGraph_ (good for dense graphs) and the _AdjacencyMapGraph_ (good for sparse graphs).
+The first think we need to do is to create our graph. At the moment of this writing there are 2 underlying implementations of the Graph interface: the _AdjacencyMatrixGraph_ (good for dense graphs) and the _AdjacencyMapGraph_ (good for sparse graphs).
 
 For this example, we choose the _AdjacencyMapGraph_ :
 
 {{{
-Graph friendGraph = new AdjacencyMapGraph();
+Graph friendGraph = GraphFactory.instantiateAdjacencyMapGraph();
 }}}
 
 Next we will want to add some nodes as in the following image:
