@@ -9,7 +9,7 @@ import java.util.Queue;
 import java.util.Stack;
 
 import org.nixus.core.structure.auxiliary.Measurable;
-import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.auxiliary.NodeVisitor;
 import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.AbstractNode;
 import org.nixus.core.structure.nodes.HiddenNodeAbstraction;
@@ -66,11 +66,11 @@ public abstract class AbstractGraph implements Graph {
 	}
 	
 	@Override
-	public List<Node> depthFirstTraversal(Node start, NodeTransformer<Node> transformer) {
+	public List<Node> depthFirstTraversal(Node start, NodeVisitor transformer) {
 		List<Node> returnList = depthFirstTraverseOnly(start);
 		for (Node node : returnList) {
 			((AbstractNode)node).setVisited(false);
-			transformer.transform(node);
+			transformer.visit(node);
 		}
 		return returnList;
 	}
@@ -100,12 +100,12 @@ public abstract class AbstractGraph implements Graph {
 	
 	@Override
 	public List<Node> breathFirstTraversal(Node start,
-			NodeTransformer<Node> transformer) {
+			NodeVisitor transformer) {
 		List<Node> returnList = this.breathFirstTraverseOnly(start);
 		
 		for (Node node : returnList) {
 			((AbstractNode)node).setVisited(false);
-			transformer.transform(node);
+			transformer.visit(node);
 		}
 		return returnList;
 	}

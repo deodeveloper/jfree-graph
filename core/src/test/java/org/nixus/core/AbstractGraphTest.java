@@ -9,7 +9,7 @@ import org.nixus.core.strategies.ShortestPathStrategy;
 import org.nixus.core.structure.Arc;
 import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
-import org.nixus.core.structure.auxiliary.NodeTransformer;
+import org.nixus.core.structure.auxiliary.NodeVisitor;
 import org.nixus.core.structure.exceptions.NegativeWeightCycleFoundException;
 import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
 import org.nixus.core.structure.nodes.Node;
@@ -230,9 +230,9 @@ public abstract class AbstractGraphTest extends TestCase {
 		node2.addArcTo(node4, new MockContent());
 		node1.addArcTo(node5, new MockContent());
 		
-		List<Node> dftResult = aGraph.depthFirstTraversal(node0, new NodeTransformer<Node>() {
+		List<Node> dftResult = aGraph.depthFirstTraversal(node0, new NodeVisitor() {
 			@Override
-			public void transform(Node node) {
+			public void visit(Node node) {
 				TraversalCountContent content = (TraversalCountContent) node.getContent();
 				
 				content.traversalCount = TraversalCountContent.totalTraversalCount;
@@ -312,9 +312,9 @@ public abstract class AbstractGraphTest extends TestCase {
 		node2.addArcTo(node4, new MockContent());
 		node1.addArcTo(node5, new MockContent());
 		
-		List<Node> dftResult = aGraph.breathFirstTraversal(node0, new NodeTransformer<Node>() {
+		List<Node> dftResult = aGraph.breathFirstTraversal(node0, new NodeVisitor() {
 			@Override
-			public void transform(Node node) {
+			public void visit(Node node) {
 				TraversalCountContent content = (TraversalCountContent) node.getContent();
 				
 				content.traversalCount = TraversalCountContent.totalTraversalCount;
