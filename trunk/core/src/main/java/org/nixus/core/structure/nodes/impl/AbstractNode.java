@@ -26,7 +26,6 @@ import org.nixus.core.structure.nodes.NodePath;
 
 /**
  * Node interface for method only accessed by the graph implementation
- * @param <M>
  * */
 public abstract class AbstractNode implements Node, HiddenNodeAbstraction{
 	
