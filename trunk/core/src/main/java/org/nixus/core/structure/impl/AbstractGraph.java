@@ -1,4 +1,4 @@
-package org.nixus.core.structure;
+package org.nixus.core.structure.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import org.nixus.core.structure.Arc;
+import org.nixus.core.structure.Graph;
 import org.nixus.core.structure.auxiliary.Measurable;
 import org.nixus.core.structure.auxiliary.NodeVisitor;
 import org.nixus.core.structure.exceptions.NotADirectedAcyclicGraphException;
