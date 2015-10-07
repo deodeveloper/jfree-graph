@@ -1,0 +1,2 @@
+# Improve morale and donate some money! #
+  * You can donate some money through paypal: [donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=GUPDD9VKTT6K8&lc=US&item_name=jfree%2dgraph&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)

@@ -1,0 +1,2 @@
+This project encompasses a free to use graph library in java. It is released under the GNU LGPL license, so commercial use of the library is allowed.
+The library uses java 1.6, but modifications to use 1.5 should be minimal.
